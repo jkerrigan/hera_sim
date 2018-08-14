@@ -1,0 +1,133 @@
+burst:
+  delta_times: 10.0
+  max_times: 60
+  raw_packages:
+  - duration: 25
+    frequency: 0.147
+    mu: 1.0
+    period: 190.0
+    sigma: 10.0
+    start_time: 43
+  - duration: 3
+    frequency: 0.125
+    mu: 1.0
+    period: 10000.0
+    sigma: 10.0
+    start_time: 8
+narrowband:
+  delta_times: 10.0
+  max_times: 60
+  raw_packages:
+  - bleed: 3.
+    frequency: 0.1007
+    mu: 1.0
+    period: 10000.0
+    sigma: 10.0
+  - bleed: .4
+    frequency: 0.1016
+    mu: 10.0
+    period: 10000.0
+    sigma: 100.0
+  - bleed: .4
+    frequency: 0.1024
+    mu: 100.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .4
+    frequency: 0.1028
+    mu: 100.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .2
+    frequency: 0.1043
+    mu: 100.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .2
+    frequency: 0.105
+    mu: 100.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .1
+    frequency: 0.1052
+    mu: 100.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .5
+    frequency: 0.1061
+    mu: 1000.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .3
+    frequency: 0.1064
+    mu: 100.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: 1.
+    frequency: 0.1371
+    mu: 1000.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .4
+    frequency: 0.1372
+    mu: 1000.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .5
+    frequency: 0.1374
+    mu: 1000.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .7
+    frequency: 0.1375
+    mu: 1000.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .3
+    frequency: 0.1376
+    mu: 1000.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .5
+    frequency: 0.1377
+    mu: 1000.0
+    period: 1150.0
+    sigma: 1000.0
+  - bleed: .4
+    frequency: 0.1831
+    mu: 1000.0
+    period: 200.0
+    sigma: 1000.0
+  - bleed: .3
+    frequency: 0.1891
+    mu: 1000.0
+    period: 2000.0
+    sigma: 1000.0
+  - bleed: 0
+    frequency: 0.1911
+    mu: 1000.0
+    period: 585.0
+    sigma: 1000.0
+  - bleed: .1
+    frequency: 0.1972
+    mu: 100.0
+    period: 200.0
+    sigma: 1000.0
+  - bleed: .5
+    frequency: 0.1999
+    mu: 1000.0
+    period: 10000.0
+    sigma: 1000.0
+  - bleed: .3
+    frequency: 0.2
+    mu: 1000.0
+    period: 10000.0
+    sigma: 1000.0
+scatter:
+  delta_times: 10.0
+  max_freqs: 1024
+  max_times: 60
+  mu: 100.0
+  period: 10000.0
+  points: 200
+  sigma: 1000.0
