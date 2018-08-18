@@ -9,12 +9,12 @@ import sys
 # generate visibility data
 # w/ standard IDR1 time/freq samples
 
-save = True
+save = False
 fname = 'SimVis_v5.h5'
-realizations = 500
+realizations = 2
 data_array = []
 flag_array = [] #[Nbls,Nt,Nf]
-plot = False
+plot = True
 files_ = sys.argv[1:]
 print files_
 
@@ -107,12 +107,13 @@ while ct < realizations:
     data_array.append(hera.return_vis(rfi=True)[:60,:])#np.nan_to_num(uv.get_data(ap)))
     #flag_array.append(AT.return_flags(rfi=rfi)[:60,:])#xrfi.xrfi(np.abs(uv.get_data(ap))))
     flag_array.append(hera.return_flags(rfi=True)[:60,:])
+    gain_flucts = np.random.normal(loc=1.,scale=np.pi/8,size=(60,1024))
     if plot:
         pl.subplot(311)
-        pl.imshow(np.log10(np.abs(data_array[ct])),aspect='auto')
+        pl.imshow(np.log10(np.abs(data_array[ct]*gain_flucts)),aspect='auto')
         pl.colorbar()
         pl.subplot(312)
-        pl.imshow(np.angle(data_array[ct]),aspect='auto')
+        pl.imshow(np.angle(data_array[ct]*gain_flucts),aspect='auto')
         pl.colorbar()
         pl.subplot(313)
         #pl.imshow(flag_array[ct],aspect='auto')

@@ -5,6 +5,18 @@ import matplotlib
 import scipy.ndimage
 import scipy
 
+def exp_decay(time=False):
+    # pull from 0 to 1 for bleed values                                                                                             
+    x = np.linspace(0.,1.,100)
+    if time:
+        dist = np.exp(-100.*x)
+        dist /= np.sum(dist)
+    else:
+        dist = np.exp(-10.*x)
+        dist /= np.sum(dist)
+    bleed = np.random.choice(x,p=dist)
+    return bleed
+
 class RFI_Sim():
     
     def __init__(self,RFIdict,telescope='HERA'):
@@ -36,11 +48,12 @@ class RFI_Sim():
             amplitude = np.random.normal(loc=mu,scale=sigma)
             phase = np.random.normal(loc=0, scale=np.pi)
             scat_signal = amplitude * np.exp(1j*phase)
-            rnd_bleed = np.random.rand()
+            rnd_bleed_f = exp_decay()#np.random.rand()
+            rnd_bleed_t = exp_decay(time=True)
             scatter_canvas_amp[times[i],freq[i]] = amplitude 
             scatter_canvas_phs[times[i],freq[i]] = phase
-            scatter_canvas_amp = scipy.ndimage.gaussian_filter(scatter_canvas_amp,sigma=rnd_bleed)
-            scatter_canvas_phs = scipy.ndimage.gaussian_filter(scatter_canvas_phs,sigma=rnd_bleed)
+            scatter_canvas_amp = scipy.ndimage.gaussian_filter(scatter_canvas_amp,sigma=[rnd_bleed_t,rnd_bleed_f])
+            scatter_canvas_phs = scipy.ndimage.gaussian_filter(scatter_canvas_phs,sigma=[rnd_bleed_t,rnd_bleed_f])
             self.baseline_data += scatter_canvas_amp*np.exp(1j*scatter_canvas_phs)
 
 
@@ -65,7 +78,7 @@ class RFI_Sim():
             amplitude_canvas[times,channel] = sinusoidal_noise * np.random.normal(loc=mu, scale=sigma, size=self.times)
 
             phase_canvas = np.zeros((self.times,self.chans))
-            phase_canvas[times,channel] = np.random.normal(loc=0, scale=np.pi, size=self.times)
+            phase_canvas[times,channel] = np.random.normal(loc=0, scale=np.pi)# + np.random.uniform(-.1,.1,size=self.times)#np.random.normal(loc=0, scale=np.pi, size=self.times)
 
             if(package.has_key('bleed')):
                 # Apply channel bleed (aka Gaussian blur)
@@ -84,7 +97,7 @@ class RFI_Sim():
         #From RFIdict
         if self.RFIdict.get('burst').get('raw_packages')[0].has_key('random'):
             random_bursts = True
-            raw_packages = range(np.random.randint(10))
+            raw_packages = range(np.random.randint(40))
         else:
             raw_packages = self.RFIdict.get('burst').get('raw_packages')
             random_bursts = False
@@ -100,7 +113,7 @@ class RFI_Sim():
                 mu = np.abs(np.random.normal(loc=1000.,scale=10000.))
                 sigma = np.abs(np.random.normal(loc=1000.,scale=1000.))
                 start_time = np.random.randint(0,self.times)
-                duration = np.abs(int(np.random.normal(loc=10,scale=10)))
+                duration = np.abs(int(np.random.normal(loc=10,scale=60)))
             else:
                 channel = np.argmin(np.abs(f - package.get('frequency')))
                 mu = package.get('mu')
@@ -117,12 +130,13 @@ class RFI_Sim():
             amplitude_canvas = np.zeros((self.times,self.chans))
             phase_canvas = np.zeros((self.times,self.chans))
             #Generates signal for time duration on specific frequency
-            rnd_bleed = np.random.uniform(.0,.5)
+            rnd_bleed_f = exp_decay()#np.random.uniform(.0,.5)
+            rnd_bleed_t = exp_decay(time=True)
             #for i in range(duration):
                 #Position amplitude is being applied to
                 #time_coordinate = i + start_time + 1
                 #Phase of signal
-            phase = np.random.normal(loc=0, scale=np.pi,size=duration)
+            phase = np.random.normal(loc=0, scale=np.pi)# + np.random.uniform(-.1,.1,size=self.times) #np.random.normal(loc=0, scale=np.pi,size=duration)
                 #Amplitude of signal
             amplitude = np.random.normal(loc=mu, scale=sigma,size=duration)
                 #Combination of amplitude (real number) and phase (imaginary number)
@@ -156,8 +170,8 @@ class RFI_Sim():
             except:
                 pass
                     #self.baseline_data += complex_canvas
-            amplitude_canvas = scipy.ndimage.gaussian_filter(amplitude_canvas,sigma=rnd_bleed)
-            phase_canvas = scipy.ndimage.gaussian_filter(phase_canvas,sigma=rnd_bleed)
+            amplitude_canvas = scipy.ndimage.gaussian_filter(amplitude_canvas,sigma=[rnd_bleed_t,rnd_bleed_f])
+            phase_canvas = scipy.ndimage.gaussian_filter(phase_canvas,sigma=[rnd_bleed_t,rnd_bleed_f])
             self.baseline_data += amplitude_canvas*np.exp(1j*phase_canvas)
 
     def applyRFI(self):

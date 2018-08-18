@@ -55,6 +55,9 @@ class SimEnviron:
             self.rfi_true = rfi.getFlags()
             vis_fg_nos_rfi = np.copy(vis_fg_nos) + rfi.getRFI()
             vis_total_rfi = sigchain.apply_gains(vis_fg_nos_rfi, g, (1,2))
+            # add cross-talk
+            xtalk = sigchain.gen_xtalk(np.linspace(.1,.2,1024),amplitude=.001)
+            vis_total_rfi = sigchain.apply_xtalk(vis_total_rfi,xtalk)
             self.data_rfi = vis_total_rfi
         else:
             g = sigchain.gen_gains(fqs, [1,2,3])
